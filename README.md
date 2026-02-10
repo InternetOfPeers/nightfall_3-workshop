@@ -2,6 +2,8 @@
 
 This repository contains the code and instructions for the Nightfall v3 Workshop, which is designed to help developers understand and work with the Nightfall v3 protocol. The workshop includes a series of scripts that simplify the process of deploying and interacting with the Nightfall v3 smart contracts on the Hedera network.
 
+> Note. If you want to attend the **live workshop at the Hedera DevDay 2026**, you can follow the instructions in this README and setup eveything in advance. In particular, you can complete the [Initial setup](#initial-setup-only-needed-the-first-time) and [Contract deployment](#contract-deployment) sections.
+
 ## Repositories
 
 1. Clone two repositories into the same parent folder:
@@ -19,7 +21,7 @@ git clone https://github.com/InternetOfPeers/nightfall_3-workshop.git
 2. Run the following commands:
 
     ```shell
-    nvm i 18; ./bin/setup-nightfall
+    nvm install 18; ./bin/setup-nightfall
     ```
 
     It would take ~15 minutes to build all the images and setup the environment.
@@ -100,7 +102,7 @@ export EVM_PRIVATE_KEY=0x48b52ab....
 2. Run the following commands to start Nightfall and its services:
 
     ```shell
-    nvm use 18
+    nvm install 18
     source .env.deployment.hedera
     export NF_SERVICES_TO_START=optimist,worker,client,mongodb,mongo-express
     export NF_SERVICES_TO_LOG=optimist,worker,client
@@ -135,8 +137,7 @@ docker logs -f nightfall_3-optimist-1
 3. Run the following commands to start a proposer that will create the batches of transactions to be submitted on the Hedera network:
 
     ```shell
-    nvm use 18
-    npm install
+    nvm install 18
     source ./bin/hedera-node.env $EVM_PRIVATE_KEY http://host.docker.internal:7546
     npm run start-proposer
     ```
@@ -147,20 +148,26 @@ docker logs -f nightfall_3-optimist-1
 2. Run the following commands to start the demo UI:
 
     ```shell
-    nvm use 18
-    npm install
+    nvm install 18
     CONFIRMATIONS=1 npm run start
     ```
 
-## Interact with the demo UI
+## Interact with the demo UI (TO BE COMPLETED)
 
-bob depoist 200
-alice depoist 100
+1. Open the demo UI in your browser at `http://localhost:3000`
+2. Connect the demo UI to your wallet (e.g. MetaMask)
+
+### Deposit
+
+bob deposit 200
+alice deposit 100
 
 make block
 
 bob has 190
 alice has 90
+
+### Transfer
 
 bob transfer 65 to alice, but pays 10 as fee, so alice receives 55
 alice transfer 20 to bob, but pays 10 as fee, so bob receives 10
@@ -169,6 +176,8 @@ make block
 
 bob has 190 - 65 + 10 = 135
 alice has 90 + 55 - 20 = 125
+
+### Withdraw
 
 alice withdraws 115 + pays 10 as fee
 

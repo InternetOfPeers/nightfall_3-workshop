@@ -2,7 +2,7 @@
 
 This repository contains the code and instructions for the Nightfall v3 on Hedera Workshop, which is designed to help developers understand and work with the Nightfall v3 protocol on the Hedera network. The workshop includes a series of scripts that simplify the process of deploying and interacting with the Nightfall v3 smart contracts on the Hedera network.
 
-> If you want to attend the **live workshop at the Hedera DevDay 2026**, you can follow the instructions in this README and setup eveything in advance. In particular, you can complete the [Initial setup](#initial-setup-15-minutes) and [Contract deployment](#contract-deployment-10-minutes) sections.
+> If you want to attend the **live workshop at the Hedera DevDay 2026**, you can follow the instructions in this README and setup eveything in advance. In particular, you can complete the [Prerequisites](#prerequisites), [Initial setup](#initial-setup-15-minutes), and [Contract deployment](#contract-deployment-10-minutes) sections.
 
 ## Prerequisites
 

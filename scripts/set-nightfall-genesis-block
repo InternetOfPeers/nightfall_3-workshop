@@ -8,5 +8,13 @@ if [ -z "$1" ]; then
 fi
 
 export STATE_GENESIS_BLOCK=$(printf "%d\n" $(curl --silent -X POST http://localhost:7546 --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' | jq -r '.result'))
+
+# Check if the block number was retrieved successfully (!= 0)
+if [ "$STATE_GENESIS_BLOCK" -eq 0 ]; then
+    echo "Failed to retrieve the current block number. The script expects the local JSON-RPC relay to be running and accessible at http://localhost:7546"
+    echo "If the relay is not running yet, launch it with the \`run-local-json-rpc-relay\` script first, then execute this script again."
+    exit 1
+fi
+
 sed -i '' "s/^STATE_GENESIS_BLOCK=.*/STATE_GENESIS_BLOCK=$STATE_GENESIS_BLOCK/" $1
 echo "Current block number $STATE_GENESIS_BLOCK set as STATE_GENESIS_BLOCK in $1"

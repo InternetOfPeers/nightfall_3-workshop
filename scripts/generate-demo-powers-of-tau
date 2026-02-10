@@ -18,7 +18,7 @@ echo ""
 WORKER_CONTAINER="nightfall_3-worker-1" #$(docker-compose ps -q worker 2>/dev/null || echo "")
 
 if [ -z "$WORKER_CONTAINER" ]; then
-  echo "❌ Error: Worker container is not running"
+  echo "Error: Worker container is not running"
   echo "   Please start Nightfall first: ./bin/start-nightfall -g -d"
   exit 1
 fi
@@ -65,7 +65,7 @@ EOF
 done
 
 echo "================================================================"
-echo "✅ Demo Powers of Tau files generated successfully!"
+echo "Demo Powers of Tau files generated successfully!"
 echo "================================================================"
 echo ""
 echo "Generated files in worker container:"

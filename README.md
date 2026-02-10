@@ -2,7 +2,7 @@
 
 This repository contains the code and instructions for the Nightfall v3 Workshop, which is designed to help developers understand and work with the Nightfall v3 protocol. The workshop includes a series of scripts that simplify the process of deploying and interacting with the Nightfall v3 smart contracts on the Hedera network.
 
-> Note. If you want to attend the **live workshop at the Hedera DevDay 2026**, you can follow the instructions in this README and setup eveything in advance. In particular, you can complete the [Initial setup](#initial-setup-only-needed-the-first-time) and [Contract deployment](#contract-deployment) sections.
+> If you want to attend the **live workshop at the Hedera DevDay 2026**, you can follow the instructions in this README and setup eveything in advance. In particular, you can complete the [Initial setup](#initial-setup-only-needed-the-first-time) and [Contract deployment](#contract-deployment) sections.
 
 ## Repositories
 
@@ -66,6 +66,8 @@ export EVM_PRIVATE_KEY=0x48b52ab....
 2. Check if all the environment variables are available in the new terminal manually or with the following command: `./scripts/check-env-variables`. If any variable is missing, export it in the terminal or add it to your shell profile.
 3. Run `./scripts/run-local-json-rpc-relay`
 
+> **Why running a local JSON-RPC relay instead of connecting directly to a public RPC endpoint?** A local relay serves multiple purposes: it allows us to sign native transactions locally with our ED25119 key, it can be configured with different parameters and services (web socket, HTTP, caching, etc.), and it can also provide additional logging and debugging capabilities that are useful during development and testing. In addition, free public RPC endpoints like Hashio are usually protected by rate limits, and using a local relay can help us avoid hitting those limits during the workshop activities.
+
 ### Deploy the contracts
 
 1. Open a new terminal and navigate to the `nightfall_3` folder
@@ -82,10 +84,11 @@ export EVM_PRIVATE_KEY=0x48b52ab....
     deployer-1 exited with code 0
     ```
 
-5. Retrieve the current Hedera block number and set it as the value for `STATE_GENESIS_BLOCK` in `./.env.deployment.hedera` manually or with the following command:
+5. Retrieve the current Hedera block number and set it as the value for `STATE_GENESIS_BLOCK` in `./.env.deployment.hedera` and `./bin/hedera-node.env` manually or with the following command:
 
     ```shell
     ../nightfall_3-workshop/scripts/set-nightfall-genesis-block ./.env.deployment.hedera
+    ../nightfall_3-workshop/scripts/set-nightfall-genesis-block ./bin/hedera-node.env
     ```
 
 6. Destroy the deployment containers with the following command:
@@ -149,6 +152,7 @@ docker logs -f nightfall_3-optimist-1
 
     ```shell
     nvm install 18
+    npm ci
     CONFIRMATIONS=1 npm run start
     ```
 

@@ -224,5 +224,5 @@ optimist - 1 | [2026-02-05 21: 51: 26.067] INFO: Transaction was valid
 optimist - 1 | [2026-02-05 21: 51: 26.068] DEBUG: Saving transaction
 optimist - 1 | transactionHash: "0x78b74770ddf410b65611bf6acd7fcccfd152d37e4ddb55c22c6281299910cf4f"
 optimist - 1 | blockNumber: 31140481
-optimist - 1 | [2026-02-05 21: 51: 26.074] INFO: 🟢[TX - SUBMITTED] ✅ Transaction saved to mempool - txHash: 0x99e67ca126aa159247fdd2e2d77284a6982de66edfdc8426c1c199a02bd3c606, L2Hash: 0x78b74770ddf410b65611bf6acd7fcccfd152d37e4ddb55c22c6281299910cf4f
-optimist - 1 | [2026-02-05 21: 51: 28.888] DEBUG: 🔵[EVENTS] Polling for events from block 31140493 to 31140495
+optimist - 1 | [2026-02-05 21: 51: 26.074] INFO: [TX - SUBMITTED] Transaction saved to mempool - txHash: 0x99e67ca126aa159247fdd2e2d77284a6982de66edfdc8426c1c199a02bd3c606, L2Hash: 0x78b74770ddf410b65611bf6acd7fcccfd152d37e4ddb55c22c6281299910cf4f
+optimist - 1 | [2026-02-05 21: 51: 28.888] DEBUG: [EVENTS] Polling for events from block 31140493 to 31140495

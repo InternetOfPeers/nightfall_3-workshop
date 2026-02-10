@@ -2,11 +2,31 @@
 
 This repository contains the code and instructions for the Nightfall v3 on Hedera Workshop, which is designed to help developers understand and work with the Nightfall v3 protocol on the Hedera network. The workshop includes a series of scripts that simplify the process of deploying and interacting with the Nightfall v3 smart contracts on the Hedera network.
 
-> If you want to attend the **live workshop at the Hedera DevDay 2026**, you can follow the instructions in this README and setup eveything in advance. In particular, you can complete the [Initial setup](#initial-setup-only-needed-the-first-time) and [Contract deployment](#contract-deployment) sections.
+> If you want to attend the **live workshop at the Hedera DevDay 2026**, you can follow the instructions in this README and setup eveything in advance. In particular, you can complete the [Initial setup](#initial-setup-15-minutes) and [Contract deployment](#contract-deployment-10-minutes) sections.
+
+## Prerequisites
+
+- [Hedera Portal Account](https://portal.hedera.com/register) with both an ECDSA and ED25519 account
+- [Docker v29+](https://www.docker.com/) with at least 2 GB RAM and 25 GB disk space for Docker images and volumes
+- [Docker Compose v5+](https://docs.docker.com/compose/)
+- [Node.js v18](https://nodejs.org/)
+- Browser wallet extension (e.g. [Rabby Wallet](https://rabby.io/), [MetaMask](https://metamask.io/), etc.) configured to connect to the Hedera testnet:
+  - Network Name: Hedera Testnet
+  - Chain ID: 296
+  - Currency Symbol: HBAR
+  - RPC URL: <http://localhost:7546> (we are going to run a local JSON-RPC relay)
+  - Block Explorer: <https://hashscan.io/testnet>
+
+### Suggestions
+
+- During the workshop we are going to use [Visual Studio Code](https://code.visualstudio.com/)
+- Some utility scripts require [jq](https://jqlang.org/) to be installed on your machine
+- [NVM](https://github.com/nvm-sh/nvm) can be used to install and switch between different Node.js versions
+- If you install multiple wallet extensions, configure them so they only access sites when clicked (i.e., extension setting: "*This extension can read and change site data → When you click the extension*"). This helps avoid wallet conflicts while using the demo UI.
 
 ## Repositories
 
-1. Clone two repositories into the same parent folder:
+1. Create a folder for the workshop and clone two repositories into it:
 
 ```shell
 mkdir nightfall-on-hedera
@@ -15,7 +35,7 @@ git clone https://github.com/InternetOfPeers/nightfall_3.git
 git clone https://github.com/InternetOfPeers/nightfall_3-workshop.git
 ```
 
-## Initial setup (only needed the first time)
+## Initial setup (~15 minutes)
 
 1. Navigate to the `nightfall_3` folder
 2. The default branch is `hedera` but in case you are on a different branch, switch to the `hedera` branch with the following command:
@@ -46,7 +66,7 @@ git clone https://github.com/InternetOfPeers/nightfall_3-workshop.git
     ✔ Image docker-blockchain Built                                                                 432.8s
     ```
 
-## Contract deployment
+## Contract deployment (~10 minutes)
 
 To deploy the contracts, you will need an EVM-compatible account on the Hedera network with some HBARs to pay for the deployment fees. You need also a native account to pay for the transactions sent by your local JSON-RPC relay. You can create both accounts and get testnet HBARs from the [Hedera Portal](https://portal.hedera.com/register).
 
@@ -55,7 +75,7 @@ To deploy the contracts, you will need an EVM-compatible account on the Hedera n
 Always use the following environment variables in your terminals from now on (you can add them to your shell profile if you want, see `./examples/.zshrc.example` for reference):
 
 ```shell
-# ED25119 key
+# ED25519 key
 export NATIVE_ACCOUNT_ID=0.0.xxxx
 export NATIVE_ADDRESS=0x000000000...
 export NATIVE_PRIVATE_KEY=302e02010....
@@ -72,7 +92,7 @@ export EVM_PRIVATE_KEY=0x48b52ab....
 2. Check if all the environment variables are available in the new terminal manually or with the following command: `./scripts/check-env-variables`. If any variable is missing, export it in the terminal or add it to your shell profile.
 3. Run `./scripts/run-local-json-rpc-relay`
 
-> **Why running a local JSON-RPC relay instead of connecting directly to a public RPC endpoint?** A local relay serves multiple purposes: it allows us to sign native transactions locally with our ED25119 key, it can be configured with different parameters and services (web socket, HTTP, caching, etc.), and it can also provide additional logging and debugging capabilities that are useful during development and testing. In addition, free public RPC endpoints like Hashio are usually protected by rate limits, and using a local relay can help us avoid hitting those limits during the workshop activities.
+> **Why running a local JSON-RPC relay instead of connecting directly to a public RPC endpoint?** A local relay serves multiple purposes: it allows us to sign native transactions locally with our ED25519 key, it can be configured with different parameters and services (web socket, HTTP, caching, etc.), and it can also provide additional logging and debugging capabilities that are useful during development and testing. In addition, free public RPC endpoints like Hashio are usually protected by rate limits, and using a local relay can help us avoid hitting those limits during the workshop activities.
 
 ### Deploy the contracts
 

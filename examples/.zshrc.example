@@ -4,7 +4,7 @@
 # Workshop 
 # ==============================================================
 
-# ED25119 key
+# ED25519 key
 export NATIVE_ACCOUNT_ID=0.0.1441
 export NATIVE_ADDRESS=0x000000000...
 export NATIVE_PRIVATE_KEY=302e02010....

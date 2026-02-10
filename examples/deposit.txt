@@ -1,0 +1,228 @@
+EXAMPLE OF GOOD DEPOSIT OPERATION
+
+
+optimist - 1 | [2026-02-05 21: 50: 48.858] DEBUG: 🔵[EVENTS] Polling for events from block 31140473 to 31140475
+optimist - 1 | [2026-02-05 21: 50: 53.859] DEBUG: 🔵[EVENTS] Polling for events from block 31140476 to 31140477
+client - 1 | [2026-02-05 21: 50: 54.261] DEBUG: Call to endpoint '/deposit'
+client - 1 | inputParams: { }
+client - 1 | [2026-02-05 21: 50: 54.262] DEBUG: Call to endpoint '/deposit'
+client - 1 | inputParams: { }
+client - 1 | [2026-02-05 21: 50: 54.263] INFO: Creating a deposit transaction
+client - 1 | correlationId: "b9b1e04f-86b6-4c96-8633-da669200ebf7"
+client - 1 | [2026-02-05 21: 50: 54.319] DEBUG: contract address was 0x2eC5C8e8C8c22C9e3BCA97Ea4E2E50cfA745019d
+client - 1 | correlationId: "b9b1e04f-86b6-4c96-8633-da669200ebf7"
+client - 1 | [2026-02-05 21: 50: 54.319] DEBUG: Getting instance of deployed contract Shield at address 0x2eC5C8e8C8c22C9e3BCA97Ea4E2E50cfA745019d
+client - 1 | correlationId: "b9b1e04f-86b6-4c96-8633-da669200ebf7"
+client - 1 | [2026-02-05 21: 50: 54.380] DEBUG: Hash of new commitment
+client - 1 | hash: "0x3fdf9f6866fb6235800f5bb5c124f78a9ae83a4529d2c666bbba71deec29a28"
+client - 1 | correlationId: "b9b1e04f-86b6-4c96-8633-da669200ebf7"
+client - 1 | [2026-02-05 21: 50: 54.411] DEBUG: witness input is
+client - 1 | witness: {
+    client - 1 | "value": "15",
+        client - 1 | "fee": "10",
+            client - 1 | "circuitHash": "531507095818",
+                client - 1 | "tokenType": "0",
+                    client - 1 | "historicRootBlockNumberL2": [],
+                        client - 1 | "ercAddress": "1015979328862571615247764214030570008895401310189",
+                            client - 1 | "tokenId": [
+                                client - 1 | "0",
+                                client - 1 | "0",
+                                client - 1 | "0",
+                                client - 1 | "0",
+                                client - 1 | "0",
+                                client - 1 | "0",
+                                client - 1 | "0",
+                                client - 1 | "0"
+client - 1 |       ],
+                                client - 1 | "recipientAddress": "0",
+                                    client - 1 | "commitments": [
+                                        client - 1 | "1805676034283763889577795511257036241545720552091987583346655696042003175976"
+client - 1 |       ],
+                                        client - 1 | "nullifiers": [],
+                                            client - 1 | "compressedSecrets": [
+                                                client - 1 | "0",
+                                                client - 1 | "0"
+client - 1 |       ],
+                                                client - 1 | "roots": [],
+                                                    client - 1 | "feeAddress": "1015979328862571615247764214030570008895401310189",
+                                                        client - 1 | "commitmentsValues": [
+                                                            client - 1 | "5"
+client - 1 |       ],
+                                                            client - 1 | "commitmentsSalts": [
+                                                                client - 1 | "6455462429373643530236441014984343791997751573231906006827527508074728705749"
+client - 1 |       ],
+                                                                client - 1 | "recipientPublicKey": [
+                                                                    client - 1 | [
+                                                                        client - 1 | "17613324842249602256458878800784903530725004085990191629567782256229476828065",
+                                                                        client - 1 | "377976199062101209565314063997003866939532390870605776652000447062356609610"
+client - 1 |         ]
+client - 1 |       ]
+    client - 1 |     }
+client - 1 | correlationId: "b9b1e04f-86b6-4c96-8633-da669200ebf7"
+client - 1 | [2026-02-05 21: 50: 54.726] DEBUG: Client made deposit
+client - 1 | transaction: {
+    client - 1 | "value": "0x000000000000000000000000000000000000000000000000000000000000000f",
+        client - 1 | "fee": "0x000000000000000000000000000000000000000000000000000000000000000a",
+            client - 1 | "circuitHash": "0x0000000000000000000000000000000000000000000000000000007bc04aa90a",
+                client - 1 | "tokenType": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                    client - 1 | "historicRootBlockNumberL2": [],
+                        client - 1 | "tokenId": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                            client - 1 | "ercAddress": "0x000000000000000000000000b1f616b8134f602c3bb465fb5b5e6565ccad37ed",
+                                client - 1 | "recipientAddress": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                    client - 1 | "commitments": [
+                                        client - 1 | "0x03fdf9f6866fb6235800f5bb5c124f78a9ae83a4529d2c666bbba71deec29a28"
+client - 1 |       ],
+                                        client - 1 | "nullifiers": [],
+                                            client - 1 | "compressedSecrets": [
+                                                client - 1 | "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                                client - 1 | "0x0000000000000000000000000000000000000000000000000000000000000000"
+client - 1 |       ],
+                                                client - 1 | "proof": [
+                                                    client - 1 | "0xac017906da65ffb10a941ffdad8b4a540ff0aac49f46ea6d0681522d57ed9221",
+                                                    client - 1 | "0xb02ff037bfb9f56834ff786b49b65ed4717a1864d7f93e6a57cfd57f74270843",
+                                                    client - 1 | "0xa979ee9da4be9feb4fc5d0d440e38359f3a010a36127ecddebef5d65cffe2501",
+                                                    client - 1 | "0x24093ca8bc7daa854b03983fc5086a66b5889a6d2b7066d3a0164e9e82960355"
+client - 1 |       ],
+                                                    client - 1 | "transactionHash": "0x78b74770ddf410b65611bf6acd7fcccfd152d37e4ddb55c22c6281299910cf4f"
+    client - 1 |     }
+client - 1 | correlationId: "b9b1e04f-86b6-4c96-8633-da669200ebf7"
+client - 1 | [2026-02-05 21: 50: 54.727] DEBUG: storing commitments
+client - 1 | commitments: [
+    client - 1 | {
+        client- 1 | "preimage": {
+            client- 1 | "ercAddress": {
+                client- 1 | "_hex": "0xb1f616b8134f602c3bb465fb5b5e6565ccad37ed"
+client - 1 |           },
+    client - 1 | "tokenId": {
+        client- 1 | "_hex": "0x00"
+client - 1 |           },
+    client - 1 | "value": {
+        client- 1 | "_hex": "0x5"
+client - 1 |           },
+    client - 1 | "zkpPublicKey": [
+        client - 1 | {
+            client- 1 | "_hex": "0x26f0c9e063a7b5d9e9ea297240f1fa0753687d3f515b7f4ee76ec60cb5e983a1"
+client - 1 |             },
+        client - 1 | {
+            client- 1 | "_hex": "0xd5ed4c6c7a9dff2f5e38533c0673e252d0e761a621fb01d75040da65a54a4a"
+client - 1 |             }
+        client - 1 |           ],
+    client - 1 | "salt": {
+        client- 1 | "_hex": "0x0e45a9897c53168444263dd33ca16c8b4b5a17d01954f41fb7d02935ec26ced5"
+client - 1 |           }
+    client - 1 |         },
+    client - 1 | "hash": {
+        client- 1 | "_hex": "0x3fdf9f6866fb6235800f5bb5c124f78a9ae83a4529d2c666bbba71deec29a28"
+client - 1 |         },
+    client - 1 | "isNullified": false,
+    client - 1 | "isNullifiedOnChain": -1,
+    client - 1 | "compressedZkpPublicKey": {
+        client- 1 | "_hex": "0x80d5ed4c6c7a9dff2f5e38533c0673e252d0e761a621fb01d75040da65a54a4a"
+client - 1 |         },
+    client - 1 | "isDeposited": true
+client - 1 |       }
+    client - 1 |     ]
+client - 1 | correlationId: "b9b1e04f-86b6-4c96-8633-da669200ebf7"
+client - 1 | [2026-02-05 21: 50: 54.727] DEBUG: nullifying commitments
+client - 1 | commitments: []
+client - 1 | correlationId: "b9b1e04f-86b6-4c96-8633-da669200ebf7"
+client - 1 | [2026-02-05 21: 50: 54.728] DEBUG: Storing commitment 0x03fdf9f6866fb6235800f5bb5c124f78a9ae83a4529d2c666bbba71deec29a28
+client - 1 | correlationId: "b9b1e04f-86b6-4c96-8633-da669200ebf7"
+client - 1 | [2026-02-05 21: 50: 54.736] DEBUG: Result from endpoint / deposit / [200]
+client - 1 | result: {
+    client - 1 | "txDataToSign": "0x1c57e89200000000000000000000000000000000000000000000000000000000000000207bc04aa90a00000000000000000000000a000000000000000000000000000f0000000000000000000000000000000000000000000000000000000000000001a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b1f616b8134f602c3bb465fb5b5e6565ccad37ed000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ac017906da65ffb10a941ffdad8b4a540ff0aac49f46ea6d0681522d57ed9221b02ff037bfb9f56834ff786b49b65ed4717a1864d7f93e6a57cfd57f74270843a979ee9da4be9feb4fc5d0d440e38359f3a010a36127ecddebef5d65cffe250124093ca8bc7daa854b03983fc5086a66b5889a6d2b7066d3a0164e9e829603550000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000103fdf9f6866fb6235800f5bb5c124f78a9ae83a4529d2c666bbba71deec29a280000000000000000000000000000000000000000000000000000000000000000",
+        client - 1 | "transaction": {
+        client - 1 | "value": "0x000000000000000000000000000000000000000000000000000000000000000f",
+            client - 1 | "fee": "0x000000000000000000000000000000000000000000000000000000000000000a",
+                client - 1 | "circuitHash": "0x0000000000000000000000000000000000000000000000000000007bc04aa90a",
+                    client - 1 | "tokenType": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                        client - 1 | "historicRootBlockNumberL2": { },
+        client - 1 | "tokenId": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            client - 1 | "ercAddress": "0x000000000000000000000000b1f616b8134f602c3bb465fb5b5e6565ccad37ed",
+                client - 1 | "recipientAddress": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                    client - 1 | "commitments": {
+            client - 1 | "0": "0x03fdf9f6866fb6235800f5bb5c124f78a9ae83a4529d2c666bbba71deec29a28"
+            client - 1 |         },
+        client - 1 | "nullifiers": { },
+        client - 1 | "compressedSecrets": [
+            client - 1 | "******************************************************************",
+            client - 1 | "******************************************************************"
+client - 1 |         ],
+            client - 1 | "proof": {
+            client - 1 | "0": "0xac017906da65ffb10a941ffdad8b4a540ff0aac49f46ea6d0681522d57ed9221",
+                client - 1 | "1": "0xb02ff037bfb9f56834ff786b49b65ed4717a1864d7f93e6a57cfd57f74270843",
+                    client - 1 | "2": "0xa979ee9da4be9feb4fc5d0d440e38359f3a010a36127ecddebef5d65cffe2501",
+                        client - 1 | "3": "0x24093ca8bc7daa854b03983fc5086a66b5889a6d2b7066d3a0164e9e82960355"
+            client - 1 |         },
+        client - 1 | "transactionHash": "0x78b74770ddf410b65611bf6acd7fcccfd152d37e4ddb55c22c6281299910cf4f"
+        client - 1 |       }
+    client - 1 |     }
+client - 1 | correlationId: "b9b1e04f-86b6-4c96-8633-da669200ebf7"
+optimist - 1 | [2026-02-05 21: 50: 58.872] DEBUG: 🔵[EVENTS] Polling for events from block 31140478 to 31140480
+optimist - 1 | [2026-02-05 21: 51:03.872] DEBUG: 🔵[EVENTS] Polling for events from block 31140481 to 31140483
+optimist - 1 | [2026-02-05 21: 51:04.102] INFO: 🟢[EVENTS] Found 1 events from Shield in blocks 31140481 - 31140483
+optimist - 1 | [2026-02-05 21: 51:04.102] INFO: 🟢[EVENTS] Event received: TransactionSubmitted, txHash: 0x99e67ca126aa159247fdd2e2d77284a6982de66edfdc8426c1c199a02bd3c606, block: 31140481
+optimist - 1 | [2026-02-05 21: 51:04.102] DEBUG: 🔵[QUEUE] queueManager called for event: TransactionSubmitted, removed: false, txHash: 0x99e67ca126aa159247fdd2e2d77284a6982de66edfdc8426c1c199a02bd3c606
+optimist - 1 | [2026-02-05 21: 51:04.102] INFO: 🟢[QUEUE] Queueing event
+optimist - 1 | event: "TransactionSubmitted"
+optimist - 1 | transactionHash: "0x99e67ca126aa159247fdd2e2d77284a6982de66edfdc8426c1c199a02bd3c606"
+optimist - 1 | priority: 1
+optimist - 1 | blockNumber: 31140481
+optimist - 1 | [2026-02-05 21: 51:04.103] DEBUG: Confirming event
+optimist - 1 | event: "TransactionSubmitted"
+optimist - 1 | [2026-02-05 21: 51:08.851] DEBUG: 🔵[EVENTS] Polling for events from block 31140484 to 31140484
+optimist - 1 | [2026-02-05 21: 51: 13.849] DEBUG: 🔵[EVENTS] Polling for events from block 31140485 to 31140487
+optimist - 1 | [2026-02-05 21: 51: 18.846] DEBUG: 🔵[EVENTS] Polling for events from block 31140488 to 31140490
+optimist - 1 | [2026-02-05 21: 51: 23.854] DEBUG: 🔵[EVENTS] Polling for events from block 31140491 to 31140492
+optimist - 1 | [2026-02-05 21: 51: 25.303] DEBUG: Event has been confirmed
+optimist - 1 | event: "TransactionSubmitted"
+optimist - 1 | total: 12
+optimist - 1 | [2026-02-05 21: 51: 25.303] INFO: 🟢[TX - SUBMITTED] TransactionSubmitted event handler called for txHash: 0x99e67ca126aa159247fdd2e2d77284a6982de66edfdc8426c1c199a02bd3c606, blockNumber: 31140481
+optimist - 1 | [2026-02-05 21: 51: 25.408] INFO: Transaction Handler - New transaction received.
+    optimist - 1 | transaction: {
+    optimist - 1 | "value": "0x000000000000000000000000000f",
+        optimist - 1 | "fee": "0x00000000000000000000000a",
+            optimist - 1 | "circuitHash": "0x7bc04aa90a",
+                optimist - 1 | "tokenType": "0x00",
+                    optimist - 1 | "historicRootBlockNumberL2": [],
+                        optimist - 1 | "tokenId": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                            optimist - 1 | "ercAddress": "0x000000000000000000000000b1f616b8134f602c3bb465fb5b5e6565ccad37ed",
+                                optimist - 1 | "recipientAddress": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                    optimist - 1 | "commitments": [
+                                        optimist - 1 | "0x03fdf9f6866fb6235800f5bb5c124f78a9ae83a4529d2c666bbba71deec29a28"
+optimist - 1 |       ],
+                                        optimist - 1 | "nullifiers": [],
+                                            optimist - 1 | "compressedSecrets": [
+                                                optimist - 1 | "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                                optimist - 1 | "0x0000000000000000000000000000000000000000000000000000000000000000"
+optimist - 1 |       ],
+                                                optimist - 1 | "proof": [
+                                                    optimist - 1 | "77800412099454278299988964421866879929687464512140015923270750764122279612961",
+                                                    optimist - 1 | "79691761084810911494199098087499714879784674446394091525325024828611505883203",
+                                                    optimist - 1 | "76656306771102001316143321552382194257406418103433396167638703623159913784577",
+                                                    optimist - 1 | "16299582826482849822807083611669163077332778936546697838087272123465880437589"
+optimist - 1 |       ],
+                                                    optimist - 1 | "transactionHash": "0x78b74770ddf410b65611bf6acd7fcccfd152d37e4ddb55c22c6281299910cf4f",
+                                                        optimist - 1 | "blockNumber": 31140481,
+                                                            optimist - 1 | "transactionHashL1": "0x99e67ca126aa159247fdd2e2d77284a6982de66edfdc8426c1c199a02bd3c606"
+    optimist - 1 |     }
+optimist - 1 | [2026-02-05 21: 51: 25.408] DEBUG: contract address was 0x813f0936C8de2D12fC9e40Ec945D9a002353aeC3
+optimist - 1 | [2026-02-05 21: 51: 25.408] DEBUG: Getting instance of deployed contract State at address 0x813f0936C8de2D12fC9e40Ec945D9a002353aeC3
+optimist - 1 | [2026-02-05 21: 51: 25.551] INFO: Commmitment 0x03fdf9f6866fb6235800f5bb5c124f78a9ae83a4529d2c666bbba71deec29a28 is escrowed
+optimist - 1 | [2026-02-05 21: 51: 25.551] INFO: Checking transaction validity...
+optimist - 1 | [2026-02-05 21: 51: 25.552] DEBUG: contract address was 0x813f0936C8de2D12fC9e40Ec945D9a002353aeC3
+optimist - 1 | [2026-02-05 21: 51: 25.552] DEBUG: contract address was 0x2eC5C8e8C8c22C9e3BCA97Ea4E2E50cfA745019d
+optimist - 1 | [2026-02-05 21: 51: 25.552] DEBUG: Getting instance of deployed contract State at address 0x813f0936C8de2D12fC9e40Ec945D9a002353aeC3
+optimist - 1 | [2026-02-05 21: 51: 25.555] DEBUG: Getting instance of deployed contract Shield at address 0x2eC5C8e8C8c22C9e3BCA97Ea4E2E50cfA745019d
+optimist - 1 | [2026-02-05 21: 51: 25.612] DEBUG: Latest valid block number in L2
+optimist - 1 | latestBlockNumberL2: -1
+optimist - 1 | [2026-02-05 21: 51: 25.841] INFO: Constructing proof with blockNumberL2s and roots
+optimist - 1 | transaction: "0x78b74770ddf410b65611bf6acd7fcccfd152d37e4ddb55c22c6281299910cf4f"
+optimist - 1 | blockNumberL2s: []
+optimist - 1 | roots: []
+optimist - 1 | [2026-02-05 21: 51: 26.067] INFO: Transaction was valid
+optimist - 1 | [2026-02-05 21: 51: 26.068] DEBUG: Saving transaction
+optimist - 1 | transactionHash: "0x78b74770ddf410b65611bf6acd7fcccfd152d37e4ddb55c22c6281299910cf4f"
+optimist - 1 | blockNumber: 31140481
+optimist - 1 | [2026-02-05 21: 51: 26.074] INFO: 🟢[TX - SUBMITTED] ✅ Transaction saved to mempool - txHash: 0x99e67ca126aa159247fdd2e2d77284a6982de66edfdc8426c1c199a02bd3c606, L2Hash: 0x78b74770ddf410b65611bf6acd7fcccfd152d37e4ddb55c22c6281299910cf4f
+optimist - 1 | [2026-02-05 21: 51: 28.888] DEBUG: 🔵[EVENTS] Polling for events from block 31140493 to 31140495

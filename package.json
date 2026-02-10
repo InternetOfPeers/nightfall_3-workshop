@@ -1,0 +1,15 @@
+{
+  "name": "nightfall_v3-workshop",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "author": "",
+  "type": "commonjs",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@hiero-ledger/sdk": "^2.80.0"
+  }
+}

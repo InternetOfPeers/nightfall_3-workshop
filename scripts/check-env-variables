@@ -1,0 +1,29 @@
+#!/bin/sh
+# This script checks if the required environment variables for the workshop are set in the current terminal session. If any variable is missing, it will print an error message and exit with a non-zero status code.
+
+REQUIRED_ENV_VARS=(
+  NATIVE_ACCOUNT_ID
+  NATIVE_ADDRESS
+  NATIVE_PRIVATE_KEY
+  EVM_ACCOUNT_ID
+  EVM_ADDRESS
+  EVM_PRIVATE_KEY
+)
+MISSING_VARS=()
+
+for VAR in "${REQUIRED_ENV_VARS[@]}"; do
+  if [ -z "${!VAR}" ]; then
+    MISSING_VARS+=("$VAR")
+  fi
+done
+
+if [ ${#MISSING_VARS[@]} -ne 0 ]; then
+  echo "Warning: The following required environment variables are not set:"
+  for VAR in "${MISSING_VARS[@]}"; do
+    echo "  - $VAR"
+  done
+  echo "Please set these variables in your terminal session or add them to your shell profile (e.g., .bashrc, .zshrc) and try again."
+  exit 1
+else
+  echo "All required environment variables are set."
+fi

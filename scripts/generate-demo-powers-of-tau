@@ -1,0 +1,82 @@
+#!/bin/bash
+
+# Generate Powers of Tau files for demo/workshop purposes
+# WARNING: These are NOT suitable for production use!
+# They are only for testing when official files are unavailable.
+
+set -e
+
+echo "================================================================"
+echo "Powers of Tau Generator for Demo/Workshop"
+echo "================================================================"
+echo ""
+echo "⚠️  WARNING: These files are for DEMO PURPOSES ONLY!"
+echo "    They are NOT secure for production use."
+echo "    In production, use files from trusted setup ceremonies."
+echo ""
+
+WORKER_CONTAINER="nightfall_3-worker-1" #$(docker-compose ps -q worker 2>/dev/null || echo "")
+
+if [ -z "$WORKER_CONTAINER" ]; then
+  echo "❌ Error: Worker container is not running"
+  echo "   Please start Nightfall first: ./bin/start-nightfall -g -d"
+  exit 1
+fi
+
+echo "📦 Generating Powers of Tau files in worker container..."
+echo "   This will take 5-10 minutes..."
+echo ""
+
+# Generate the required powers: 10, 15, 16
+POWERS=(10 15 16)
+
+for POWER in "${POWERS[@]}"; do
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "Generating power ${POWER} (2^${POWER} = $((2**POWER)) constraints)..."
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  
+  docker exec -i "$WORKER_CONTAINER" bash << EOF
+    cd /app/output
+    
+    # Check if file already exists
+    if [ -f "powersOfTau28_hez_final_${POWER}.ptau" ]; then
+      echo "✓ powersOfTau28_hez_final_${POWER}.ptau already exists, skipping..."
+      exit 0
+    fi
+    
+    echo "Step 1/3: Creating new Powers of Tau ceremony..."
+    npx snarkjs powersoftau new bn128 ${POWER} pot${POWER}_0000.ptau -v
+    
+    echo "Step 2/3: Contributing to ceremony (1 contribution)..."
+    npx snarkjs powersoftau contribute pot${POWER}_0000.ptau pot${POWER}_0001.ptau \
+      --name="Demo contribution" -v -e="demo random entropy"
+    
+    echo "Step 3/3: Preparing for phase 2..."
+    npx snarkjs powersoftau prepare phase2 pot${POWER}_0001.ptau powersOfTau28_hez_final_${POWER}.ptau -v
+    
+    # Cleanup intermediate files
+    rm -f pot${POWER}_0000.ptau pot${POWER}_0001.ptau
+    
+    echo "✓ Generated powersOfTau28_hez_final_${POWER}.ptau"
+    ls -lh powersOfTau28_hez_final_${POWER}.ptau
+EOF
+  
+  echo ""
+done
+
+echo "================================================================"
+echo "✅ Demo Powers of Tau files generated successfully!"
+echo "================================================================"
+echo ""
+echo "Generated files in worker container:"
+docker exec "$WORKER_CONTAINER" ls -lh /app/output/powersOfTau*.ptau
+echo ""
+echo "⚠️  IMPORTANT REMINDERS:"
+echo "   1. These are for DEMO/WORKSHOP purposes only"
+echo "   2. NOT cryptographically secure (single contributor)"
+echo "   3. Never use in production"
+echo "   4. For production, use official ceremony files"
+echo ""
+echo "You can now restart the deployer:"
+echo "   docker-compose restart deployer"
+echo ""

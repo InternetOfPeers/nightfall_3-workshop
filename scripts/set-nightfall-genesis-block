@@ -1,0 +1,12 @@
+#!/bin/sh
+# Get the current block number and update the STATE_GENESIS_BLOCK variable in the specified file
+
+# Check if the file path is provided as an argument
+if [ -z "$1" ]; then
+    echo "Usage: $0 <path_to_env_file>"
+    exit 1
+fi
+
+export STATE_GENESIS_BLOCK=$(printf "%d\n" $(curl --silent -X POST http://localhost:7546 --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' | jq -r '.result'))
+sed -i '' "s/^STATE_GENESIS_BLOCK=.*/STATE_GENESIS_BLOCK=$STATE_GENESIS_BLOCK/" $1
+echo "Current block number $STATE_GENESIS_BLOCK set as STATE_GENESIS_BLOCK in $1"

@@ -36,6 +36,8 @@ git clone https://github.com/InternetOfPeers/nightfall_3.git
 git clone https://github.com/InternetOfPeers/nightfall_3-workshop.git
 ```
 
+> Note: The updates created for the Hedera network on the Nightfall projects, which you can find in the InternetOfPeers fork, start from the [aqua_fix_ethsepolia](https://github.com/EYBlockchain/nightfall_3/tree/aqua_fix_ethsepolia) branch of the original Nightfall v3 repository. That branch in fact contains several months more of fixes than the main branch.
+
 ## Initial minimal setup (~5 minutes)
 
 1. Navigate to the `nightfall_3` folder

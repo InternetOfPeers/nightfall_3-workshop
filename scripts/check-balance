@@ -1,0 +1,106 @@
+#!/usr/bin/env node
+// ----------------------------------------------------------------------
+// • Reads the balance of a Hedera account (testnet)
+// • Converts tinybars → HBAR
+// • Retrieves the HBAR → USD exchange rate from the Mirror Node
+// • Displays balance in tinybars, HBAR and USD
+// ----------------------------------------------------------------------
+
+const https = require("https");
+
+if (process.argv.length < 3) {
+  console.error("Usage: node check-balance.js <account-id>");
+  process.exit(1);
+}
+const ACCOUNT_ID = process.argv[2]; // supports both "0.0.x" and "0x" formats
+const BASE_URL = "testnet.mirrornode.hedera.com";
+const BALANCE_PATH = `/api/v1/accounts/${ACCOUNT_ID}`;
+const EXCHANGE_PATH = "/api/v1/network/exchangerate";
+
+// 1 HBAR = 100,000,000 tinybars
+function tinyToHbar(tinybars) {
+  return tinybars / 100000000;
+}
+
+function httpsGet(path) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: BASE_URL,
+      path: path,
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+    https
+      .get(options, (res) => {
+        let data = "";
+        res.on("data", (chunk) => {
+          data += chunk;
+        });
+        res.on("end", () => {
+          if (res.statusCode === 200) {
+            try {
+              resolve(JSON.parse(data));
+            } catch (err) {
+              reject(new Error(`Failed to parse JSON: ${err.message}`));
+            }
+          } else {
+            reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+          }
+        });
+      })
+      .on("error", (err) => {
+        reject(new Error(`Request failed: ${err.message}`));
+      });
+  });
+}
+
+async function main() {
+  try {
+    const balanceData = await httpsGet(BALANCE_PATH);
+    if (
+      !balanceData.balance ||
+      typeof balanceData.balance.balance !== "number"
+    ) {
+      throw new Error("Balance field not found in API response");
+    }
+    const balanceTiny = balanceData.balance.balance;
+    const balanceHbar = tinyToHbar(balanceTiny);
+    // Retrieve exchange rate
+    const exchangeData = await httpsGet(EXCHANGE_PATH);
+    if (
+      !exchangeData.current_rate ||
+      !exchangeData.current_rate.hbar_equivalent ||
+      !exchangeData.current_rate.cent_equivalent
+    ) {
+      throw new Error("Exchange rate data incomplete");
+    }
+    const hbarEquivalent = exchangeData.current_rate.hbar_equivalent;
+    const centEquivalent = exchangeData.current_rate.cent_equivalent;
+    // Calculate price per HBAR in USD:
+    //   hbar_equivalent is already in HBAR
+    //   cent_equivalent is in cents USD
+    //   price_per_HBAR = (cent_equivalent/100) / hbar_equivalent
+    const priceUsdPerHbar = centEquivalent / 100 / hbarEquivalent;
+    // Calculate total value in USD
+    const valueUsd = balanceHbar * priceUsdPerHbar;
+    // Results output
+    console.log(`Account            : ${ACCOUNT_ID}`);
+    console.log(
+      `Approximate value  : $${valueUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`,
+    );
+    console.log(
+      `Balance            : ${balanceTiny.toLocaleString()} tinybars (${balanceHbar.toLocaleString(undefined, { minimumFractionDigits: 8, maximumFractionDigits: 8 })} HBAR)`,
+    );
+    console.log(
+      `HBAR → USD         : $${priceUsdPerHbar.toFixed(8)} per HBAR\n`,
+    );
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+}
+
+// Run main function
+main();

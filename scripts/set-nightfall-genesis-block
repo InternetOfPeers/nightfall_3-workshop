@@ -1,9 +1,9 @@
 #!/bin/sh
-# Get the current block number and update the STATE_GENESIS_BLOCK variable in the specified file
+# Get the current block number and update the STATE_GENESIS_BLOCK variable in the specified file(s)
 
 # Check if the file path is provided as an argument
 if [ -z "$1" ]; then
-    echo "Usage: $0 <path_to_env_file>"
+    echo "Usage: $0 <path_to_env_file> [path_to_second_env_file]"
     exit 1
 fi
 
@@ -16,5 +16,11 @@ if [ "$STATE_GENESIS_BLOCK" -eq 0 ]; then
     exit 1
 fi
 
-sed -i '' "s/^STATE_GENESIS_BLOCK=.*/STATE_GENESIS_BLOCK=$STATE_GENESIS_BLOCK/" $1
+sed -i '' "s/^\(export \)\{0,1\}STATE_GENESIS_BLOCK=.*/\1STATE_GENESIS_BLOCK=$STATE_GENESIS_BLOCK/" $1
 echo "Current block number $STATE_GENESIS_BLOCK set as STATE_GENESIS_BLOCK in $1"
+
+# Update second file if provided
+if [ -n "$2" ]; then
+    sed -i '' "s/^\(export \)\{0,1\}STATE_GENESIS_BLOCK=.*/\1STATE_GENESIS_BLOCK=$STATE_GENESIS_BLOCK/" $2
+    echo "Current block number $STATE_GENESIS_BLOCK set as STATE_GENESIS_BLOCK in $2"
+fi

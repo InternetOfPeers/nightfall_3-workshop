@@ -1,0 +1,66 @@
+#!/usr/bin/env node
+const {
+  AccountId,
+  PrivateKey,
+  Client,
+  Hbar,
+  AccountCreateTransaction,
+} = require("@hiero-ledger/sdk");
+
+async function main() {
+  let client;
+  try {
+    const MY_ACCOUNT_ID = AccountId.fromString(process.env.NATIVE_ACCOUNT_ID);
+    const MY_PRIVATE_KEY = process.env.NATIVE_PRIVATE_KEY;
+
+    client = Client.forTestnet();
+    client.setOperator(MY_ACCOUNT_ID, MY_PRIVATE_KEY);
+
+    //Generate a new key for the account
+    const accountPrivateKey = PrivateKey.generateECDSA();
+    const accountPublicKey = accountPrivateKey.publicKey;
+
+    const txCreateAccount = new AccountCreateTransaction()
+      .setECDSAKeyWithAlias(accountPublicKey)
+      //DO NOT set an alias with your key if you plan to update/rotate keys in the future, Use .setKeyWithoutAlias instead
+      //.setKeyWithoutAlias(accountPublicKey)
+      .setInitialBalance(new Hbar(100));
+
+    const txCreateAccountResponse = await txCreateAccount.execute(client);
+    const receiptCreateAccountTx =
+      await txCreateAccountResponse.getReceipt(client);
+    const statusCreateAccountTx = receiptCreateAccountTx.status;
+    const accountId = receiptCreateAccountTx.accountId;
+    const txIdAccountCreated = txCreateAccountResponse.transactionId.toString();
+
+    console.log(
+      "------------------------------ Create Account ------------------------------ ",
+    );
+    console.log("Receipt status       :", statusCreateAccountTx.toString());
+    console.log("Transaction ID       :", txIdAccountCreated);
+    console.log(
+      "Hashscan URL         :",
+      `https://hashscan.io/testnet/transaction/${txIdAccountCreated}`,
+    );
+    console.log("Account ID           :", accountId.toString());
+    console.log(
+      "EVM Address          :",
+      `0x${accountPublicKey.toEvmAddress()}`,
+    );
+    console.log(
+      "Private key          :",
+      `0x${accountPrivateKey.toStringRaw()}`,
+    );
+    console.log(
+      "Public key           :",
+      `0x${accountPublicKey.toStringRaw()}`,
+    );
+  } catch (error) {
+    console.error(error);
+  } finally {
+    if (client) client.close();
+    process.exit(0);
+  }
+}
+
+main();

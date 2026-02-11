@@ -310,3 +310,10 @@ The withdraw operation - sending money from the shielded pool to the L1 - can be
 4. Ask for anothe block to be created and wait for the transaction to be confirmed on the Hedera network
 5. After 7 days, Carl can redeem the funds sending a new transaction to the contract.
 6. On the other side, you can already check Alice's balance in the app and it should be now 10 WHBARs lower.
+
+The final result after the deposit step should be the following:
+
+| Wallet User | EVM Account | L1 Balance            | Nightfall User     | L2 Balance  |
+| ----------- | ----------- | --------------------- | ------------------ | ----------- |
+| Carl        | 0x123...    | ~19.9 HBAR + 20 WHBAR | Alice              | 70 WHBAR    |
+| Dave        | 0x456...    | ~19.9 HBAR + 30 WHBAR | Bob                | 30 WHBAR    |

@@ -1,0 +1,111 @@
+#!/usr/bin/env node
+const { Client, TransferTransaction, Hbar } = require("@hiero-ledger/sdk");
+const https = require("https");
+
+const BASE_URL = "testnet.mirrornode.hedera.com";
+const EXCHANGE_PATH = "/api/v1/network/exchangerate";
+
+function httpsGet(path) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: BASE_URL,
+      path: path,
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+    https
+      .get(options, (res) => {
+        let data = "";
+        res.on("data", (chunk) => {
+          data += chunk;
+        });
+        res.on("end", () => {
+          if (res.statusCode === 200) {
+            try {
+              resolve(JSON.parse(data));
+            } catch (err) {
+              reject(new Error(`Failed to parse JSON: ${err.message}`));
+            }
+          } else {
+            reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+          }
+        });
+      })
+      .on("error", (err) => {
+        reject(new Error(`Request failed: ${err.message}`));
+      });
+  });
+}
+
+async function main() {
+  let client;
+  try {
+    const MY_ACCOUNT_ID = process.env.NATIVE_ACCOUNT_ID;
+    const MY_PRIVATE_KEY = process.env.NATIVE_PRIVATE_KEY;
+    const dollarAmount = process.argv[2];
+    if (dollarAmount == null) {
+      throw new Error(
+        "Please provide the dollar amount to transfer as a command line argument",
+      );
+    }
+    const recipient = process.argv[3];
+    if (recipient == null) {
+      throw new Error(
+        "Please provide the recipient account ID as a command line argument",
+      );
+    }
+
+    // Retrieve exchange rate from Hedera Mirror Node
+    console.log("Fetching exchange rate from Hedera Mirror Node...");
+    const exchangeData = await httpsGet(EXCHANGE_PATH);
+    if (
+      !exchangeData.current_rate ||
+      !exchangeData.current_rate.hbar_equivalent ||
+      !exchangeData.current_rate.cent_equivalent
+    ) {
+      throw new Error("Exchange rate data incomplete");
+    }
+    const hbarEquivalent = exchangeData.current_rate.hbar_equivalent;
+    const centEquivalent = exchangeData.current_rate.cent_equivalent;
+    
+    // Calculate price per HBAR in USD
+    const priceUsdPerHbar = centEquivalent / 100 / hbarEquivalent;
+    console.log(`Current rate: $${priceUsdPerHbar.toFixed(8)} per HBAR`);
+    
+    // Convert dollar amount to HBAR and round to 8 decimal places to avoid fractional tinybars
+    const hbarAmount = Math.round((parseFloat(dollarAmount) / priceUsdPerHbar) * 100000000) / 100000000;
+    console.log(`Converting $${dollarAmount} to ${hbarAmount.toFixed(8)} HBAR\n`);
+
+    client = Client.forTestnet();
+    client.setOperator(MY_ACCOUNT_ID, MY_PRIVATE_KEY);
+
+    const txTransfer = new TransferTransaction()
+      .addHbarTransfer(MY_ACCOUNT_ID, new Hbar(-hbarAmount))
+      .addHbarTransfer(recipient, new Hbar(hbarAmount));
+
+    const txTransferResponse = await txTransfer.execute(client);
+    const receiptTransferTx = await txTransferResponse.getReceipt(client);
+    const statusTransferTx = receiptTransferTx.status;
+    const txIdTransfer = txTransferResponse.transactionId.toString();
+
+    console.log(
+      "-------------------------------- Transfer HBAR ------------------------------ ",
+    );
+    console.log("Receipt status           :", statusTransferTx.toString());
+    console.log("Transaction ID           :", txIdTransfer);
+    console.log(
+      "Hashscan URL             :",
+      `https://hashscan.io/testnet/transaction/${txIdTransfer}`,
+    );
+  } catch (error) {
+    console.error(error);
+    process.exit(-1);
+  } finally {
+    if (client) client.close();
+    process.exit(0);
+  }
+}
+
+main();

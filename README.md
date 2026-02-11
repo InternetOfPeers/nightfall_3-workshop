@@ -25,6 +25,24 @@ This repository contains the code and instructions for the Nightfall v3 on Heder
 - [NVM](https://github.com/nvm-sh/nvm) can be used to install and switch between different Node.js versions
 - If you install multiple wallet extensions, configure them so they only access sites when clicked (i.e., extension setting: "*This extension can read and change site data → When you click the extension*"). This helps avoid wallet conflicts while using the demo UI.
 
+## Setup environment variables
+
+Consider always having the following environment variables configured in your terminals. You can add them to your shell profile if you want, see `./nightfall_3-workshop/examples/.zshrc.example` for reference:
+
+```shell
+# ED25519 key
+export NATIVE_ACCOUNT_ID=0.0.xxxx
+export NATIVE_ADDRESS=0x000000000...
+export NATIVE_PRIVATE_KEY=302e02010....
+
+# ECDSA key
+export EVM_ACCOUNT_ID=0.0.xxxx
+export EVM_ADDRESS=0xe0b73f....
+export EVM_PRIVATE_KEY=0x48b52ab....
+```
+
+The native account variables are mostly used in the utility scripts (i.e., `./scripts/create-account`, `./scripts/transfer-hbar`, etc.) and for the JSON-RPC relay, while the EVM variables are mostly used in the EVM related operations (i.e., contract deployment, execution, etc.).
+
 ## Repositories
 
 1. Create a folder for the workshop and clone two repositories into it:
@@ -68,22 +86,26 @@ git clone https://github.com/InternetOfPeers/nightfall_3-workshop.git
 
 ## Contract deployment and circuits setup (~10 minutes)
 
-To deploy the contracts, you will need an EVM-compatible account on the Hedera network with some HBARs to pay for the deployment fees. You need also a native account to pay for the transactions sent by your local JSON-RPC relay. You can create both accounts and get testnet HBARs from the [Hedera Portal](https://portal.hedera.com/register).
+To deploy the contracts, you will need an EVM-compatible account on the Hedera network with some HBARs to pay for the deployment fees. You need also a native account to pay in case of Hedera errors (not EVM errors) in the transactions sent by your local JSON-RPC relay. You can create both accounts and get testnet HBARs from the [Hedera Portal](https://portal.hedera.com/register). Although the deployment is going to cost less than $5, it is suggested to fund each account with at least $10 worth of HBARs to easily cover transaction fees and other tests during the workshop.
 
-### Setup environment variables
-
-Always use the following environment variables in your terminals from now on (you can add them to your shell profile if you want, see `./nightfall_3-workshop/examples/.zshrc.example` for reference):
+You can quickly check your accounts balance with the following command:
 
 ```shell
-# ED25519 key
-export NATIVE_ACCOUNT_ID=0.0.xxxx
-export NATIVE_ADDRESS=0x000000000...
-export NATIVE_PRIVATE_KEY=302e02010....
+./nightfall_3-workshop/scripts/check-balance $EVM_ADDRESS
+./nightfall_3-workshop/scripts/check-balance $NATIVE_ACCOUNT_ID
+```
 
-# ECDSA key
-export EVM_ACCOUNT_ID=0.0.xxxx
-export EVM_ADDRESS=0xe0b73f....
-export EVM_PRIVATE_KEY=0x48b52ab....
+If you need to quickly create a new dedicated account, you can use the following command:
+
+```shell
+./nightfall_3-workshop/scripts/create-account
+```
+
+If you need to quickly transfer funds from your `$NATIVE_ACCOUNT_ID` to fund other accounts, you can use the following command:
+
+```shell
+./nightfall_3-workshop/scripts/transfer-dollars 10.00 <0.0.xxx or 0x123...>
+./nightfall_3-workshop/scripts/transfer-hbar 100 <0.0.xxx or 0x123...>
 ```
 
 ### Start the JSON-RPC relay

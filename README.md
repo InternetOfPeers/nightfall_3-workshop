@@ -252,6 +252,8 @@ The final result after the users setup should be the following:
 | Carl        | 0x123...    | ~19.9 HBAR + 80 WHBAR | Alice              | 0 WHBAR     |
 | Dave        | 0x456...    | ~19.9 HBAR + 80 WHBAR | Bob                | 0 WHBAR     |
 
+> Note. Carl and Dave's addresses are **disposable** and not linked to Nightfall users; they are only used to **pay on-chain transaction fees**. If you use the demo UI again in the future, you can create or use different EVM accounts and link them to the same Alice and Bob users by inserting the same mnemonics used during the initial setup. Everything will work as before.
+
 ### Deposit
 
 The deposit operation - sending money from the L1 to the shielded pool - implies always an on-chain transaction.

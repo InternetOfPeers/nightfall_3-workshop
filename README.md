@@ -283,37 +283,38 @@ In case users cannot reach a proposer or an optimist process directly, they can 
 In this demo we are going to use the direct submission to the Proposer (that forward the transactions to the Optimist process), so we can keep eveything private and off-chain.
 
 1. Select Carl's account in your wallet extension. You should notice Alice's account is now selected in the demo UI.
-2. Select the Transfer function, flag the "Offchain (instant transfer)" option, and send 20.00000010 WHBARs (`2000000010`) to Bob. Alice will pay 0.00000010 WHBARs (`10`) as fee.
+2. Select the Transfer function, flag the "Offchain (instant transfer)" option, and send 20.00000000 WHBARs (`2000000000`) to Bob. Alice will pay 0.00000010 WHBARs (`10`) as fee.
 3. Notice you are not signing any transaction with your wallet account, because the transaction is created and signed locally in the app with Alice's ZKP private key, and then submitted directly to the Proposer.
 4. Select Dave's account in your wallet extension. You should notice Bob's account is now selected in the demo UI.
 5. Select the Transfer function, flag the "Offchain (instant transfer)" option, and send 40.00000000 WHBARs (`4000000000`) to Alice. Bob will pay 0.00000010 WHBARs (`10`) as fee. Please note the fee will be added **on top** of the transfer amount, so make sure to have enough balance to cover both the transfer and the fee.
 6. Again as before, notice you are not signing any transaction with your wallet account.
 7. Press the "Make the block" and wait for the block to be confirmed by the Optimist process.
 8. If the balances don't update automatically, use the "Fetch Balances" button to trigger a manual update.
-9. Check the balance for both Alice and Bob in the demo UI. Alice should have now 80 WHBARs (`8000000000`), and Bob should have 30 WHBARs (`3000000000`). Carl and Dave's balance on the L1 remained the same because they didn't spend any fund. Transaction fees were in fact paid by the Proposer.
+9. Check the balance for both Alice and Bob in the demo UI. Alice should have now 79.99999990 WHBARs (`7999999990`), and Bob should have 29.99999990 WHBARs (`2999999990`). Carl and Dave's balance on the L1 remained the same because they didn't spend any fund. Transaction fees were in fact paid by the Proposer.
 10. (Optional) Experiment with another transfer, this time without selecting the "Offchain (instant transfer)" option. This time the app will ask to sign a transaction, the Optimist process will notice that transaction when it will be finalized on-chain and will put that in its mempool. Ask for creating a new block for the Proposer to submit the L2 block and see the balance change after the block confirmation.
 
 The final result after the deposit step should be the following:
 
-| Wallet User | EVM Account | L1 Balance            | Nightfall User     | L2 Balance  |
-| ----------- | ----------- | --------------------- | ------------------ | ----------- |
-| Carl        | 0x123...    | ~19.9 HBAR + 20 WHBAR | Alice              | 80 WHBAR    |
-| Dave        | 0x456...    | ~19.9 HBAR + 30 WHBAR | Bob                | 30 WHBAR    |
+| Wallet User | EVM Account | L1 Balance            | Nightfall User     | L2 Balance           |
+| ----------- | ----------- | --------------------- | ------------------ | -------------------- |
+| Carl        | 0x123...    | ~19.9 HBAR + 20 WHBAR | Alice              | 79.99999990 WHBAR    |
+| Dave        | 0x456...    | ~19.9 HBAR + 30 WHBAR | Bob                | 29.99999990 WHBAR    |
 
 ### Withdraw
 
 The withdraw operation - sending money from the shielded pool to the L1 - can be executed in two ways: with a normal withdraw, which implies an on-chain transaction and a waiting period of 7 days before the funds are actually available on the user's account; or with an instant withdraw, which implies the generation of ZKPs and their submission to the Optimist process. In this case a liquidity provider can be used to get the funds immediately for an additional fee. The Liquidity provider (not configured for this demo) will be able to redeem the withdraw commitment on-chain and will get the funds in exchange of the off-chain fee agreed
 
 1. Select Carl's account in your wallet extension. You should notice Alice's account is now selected in the demo UI.
-2. Select the Withdraw function, set 10.00000000 WHBARs (`1000000000`) and press "Withdraw". Alice will pay 0.00000010 WHBARs (`10`) as fee **on top** of the withdrawal amount, and the app will ask to sign the transaction with Carl's wallet account.
+2. Select the Withdraw function, set 9.99999980 WHBARs (`999999980`) and press "Withdraw". Alice will pay 0.00000010 WHBARs (`10`) as fee **on top** of the withdrawal amount, and the app will ask to sign the transaction with Carl's wallet account.
 3. After signing the transaction, the withdraw transaction is submitted on-chain.
-4. Ask for anothe block to be created and wait for the transaction to be confirmed on the Hedera network
-5. After 7 days, Carl can redeem the funds sending a new transaction to the contract.
-6. On the other side, you can already check Alice's balance in the app and it should be now 10 WHBARs lower.
+4. The Optimist process will notice the transaction, and it will add it to the mempool.
+5. Ask for another block to be created and wait for the transaction to be confirmed on the Hedera network
+6. After 7 days, Carl can redeem the funds sending a new transaction to the contract.
+7. On the other side, you can already check Alice's balance in the app and it should be now 10 WHBARs lower.
 
 The final result after the deposit step should be the following:
 
-| Wallet User | EVM Account | L1 Balance            | Nightfall User     | L2 Balance  |
-| ----------- | ----------- | --------------------- | ------------------ | ----------- |
-| Carl        | 0x123...    | ~19.9 HBAR + 20 WHBAR | Alice              | 70 WHBAR    |
-| Dave        | 0x456...    | ~19.9 HBAR + 30 WHBAR | Bob                | 30 WHBAR    |
+| Wallet User | EVM Account | L1 Balance            | Nightfall User     | L2 Balance           |
+| ----------- | ----------- | --------------------- | ------------------ | -------------------- |
+| Carl        | 0x123...    | ~19.9 HBAR + 20 WHBAR | Alice              | 70 WHBAR             |
+| Dave        | 0x456...    | ~19.9 HBAR + 30 WHBAR | Bob                | 29.99999990 WHBAR    |

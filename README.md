@@ -247,25 +247,25 @@ Again just for this demo, we are going to transfer WHBAR directly, so the setup 
 
 The final result after the users setup should be the following:
 
-| Wallet User | EVM Account | L1 Balance         | Nightfall User     | L2 Balance  |
-| ----------- | ----------- | ------------------ | ------------------ | ----------- |
-| Carl        | 0x123...    | 20 HBAR + 80 WHBAR | Alice              | 0 WHBAR     |
-| Dave        | 0x456...    | 20 HBAR + 80 WHBAR | Bob                | 0 WHBAR     |
+| Wallet User | EVM Account | L1 Balance            | Nightfall User     | L2 Balance  |
+| ----------- | ----------- | --------------------- | ------------------ | ----------- |
+| Carl        | 0x123...    | ~19.9 HBAR + 80 WHBAR | Alice              | 0 WHBAR     |
+| Dave        | 0x456...    | ~19.9 HBAR + 80 WHBAR | Bob                | 0 WHBAR     |
 
 ### Deposit
 
 The deposit operation - sending money from the L1 to the shielded pool - implies always an on-chain transaction.
 
 1. Select Carl's account in your wallet extension. You should notice Alice's account is now selected in the demo UI.
-2. Deposit 60.00000010 WHBAR. Alice will receive 60 WHBARs in the shielded pool, and 0.00000010 WHBARs will be used to pay the fee for the proposer.
+2. Deposit 60.00000010 WHBAR (`6000000010`). Alice will receive 60 WHBARs in the shielded pool, and 0.00000010 WHBARs (`10`) will be used to pay the fee for the proposer.
 3. (only the first time) The app will ask to sign the approval for the Nightfall contract to spend Carl's WHBARs, and then the approval transaction will be submitted on the Hedera network. Wait for the transaction to be confirmed.
 4. The app now ask to sign the actual deposit transaction. Once submitted, nothing seems to happen yet. The transaction is pending but not in a block or on-chain yet.
 5. Select Dave's account in your wallet extension. You should notice Bob's account is now selected in the demo UI.
-6. Deposit 50.00000010 WHBAR. Bob will receive 50 WHBARs in the shielded pool, and 0.00000010 WHBARs will be used to pay the fee for the proposer.
+6. Deposit 50.00000010 WHBAR (`5000000010`). Bob will receive 50 WHBARs in the shielded pool, and 0.00000010 WHBARs (`10`) will be used to pay the fee for the proposer.
 7. Repeat the same steps as for Alice to approve and submit the deposit transaction for Bob.
 8. Now we have two pending transactions, one for Alice and one for Bob, waiting to be included in a block by the proposer. Instead of waiting for the block to be full and being created, you can speed up the process to force the block creation: press "Make block" button.
 9. Switch to the Optimist logs. Notice how the transactions are submitted, how the process get the event notifications from the on-chain transactions by the relay, and how the Optimist process waits for confirmation of the first L2 block. Once the L2 block is confirmed, the transactions are finalized and the commitments included in the state.
-10. Switch to the demo UI: Alice's balance should now show 60 WHBARs, and Bob's balance should show 50 WHBARs.
+10. Switch to the demo UI: Alice's balance should now show 60 WHBARs (`6000000000`), and Bob's balance should show 50 WHBARs (`5000000000`). If the balances don't update automatically, use the "Fetch Balances" button to trigger a manual update.
 
 The final result after the deposit step should be the following:
 
@@ -283,14 +283,14 @@ In case users cannot reach a proposer or an optimist process directly, they can 
 In this demo we are going to use the direct submission to the Proposer (that forward the transactions to the Optimist process), so we can keep eveything private and off-chain.
 
 1. Select Carl's account in your wallet extension. You should notice Alice's account is now selected in the demo UI.
-2. Select the Transfer function, flag the "Offchain (instant transfer)" option, and send 20.00000010 WHBARs to Bob. Alice will pay 0.00000010 WHBARs as fee.
+2. Select the Transfer function, flag the "Offchain (instant transfer)" option, and send 20.00000010 WHBARs (`2000000010`) to Bob. Alice will pay 0.00000010 WHBARs (`10`) as fee.
 3. Notice you are not signing any transaction with your wallet account, because the transaction is created and signed locally in the app with Alice's ZKP private key, and then submitted directly to the Proposer.
 4. Select Dave's account in your wallet extension. You should notice Bob's account is now selected in the demo UI.
-5. Select the Transfer function, flag the "Offchain (instant transfer)" option, and send 40.00000000 WHBARs to Alice. Bob will pay 0.00000010 WHBARs as fee. Please note the fee will be added **on top** of the transfer amount, so make sure to have enough balance to cover both the transfer and the fee.
+5. Select the Transfer function, flag the "Offchain (instant transfer)" option, and send 40.00000000 WHBARs (`4000000000`) to Alice. Bob will pay 0.00000010 WHBARs (`10`) as fee. Please note the fee will be added **on top** of the transfer amount, so make sure to have enough balance to cover both the transfer and the fee.
 6. Again as before, notice you are not signing any transaction with your wallet account.
 7. Press the "Make the block" and wait for the block to be confirmed by the Optimist process.
 8. If the balances don't update automatically, use the "Fetch Balances" button to trigger a manual update.
-9. Check the balance for both Alice and Bob in the demo UI. Alice should have now 80 WHBARs, and Bob should have 30 WHBARs. Carl and Dave's balance on the L1 remained the same because they didn't spend any fund. Transaction fees were in fact paid by the Proposer.
+9. Check the balance for both Alice and Bob in the demo UI. Alice should have now 80 WHBARs (`8000000000`), and Bob should have 30 WHBARs (`3000000000`). Carl and Dave's balance on the L1 remained the same because they didn't spend any fund. Transaction fees were in fact paid by the Proposer.
 10. (Optional) Experiment with another transfer, this time without selecting the "Offchain (instant transfer)" option. This time the app will ask to sign a transaction, the Optimist process will notice that transaction when it will be finalized on-chain and will put that in its mempool. Ask for creating a new block for the Proposer to submit the L2 block and see the balance change after the block confirmation.
 
 The final result after the deposit step should be the following:
@@ -305,7 +305,7 @@ The final result after the deposit step should be the following:
 The withdraw operation - sending money from the shielded pool to the L1 - can be executed in two ways: with a normal withdraw, which implies an on-chain transaction and a waiting period of 7 days before the funds are actually available on the user's account; or with an instant withdraw, which implies the generation of ZKPs and their submission to the Optimist process. In this case a liquidity provider can be used to get the funds immediately for an additional fee. The Liquidity provider (not configured for this demo) will be able to redeem the withdraw commitment on-chain and will get the funds in exchange of the off-chain fee agreed
 
 1. Select Carl's account in your wallet extension. You should notice Alice's account is now selected in the demo UI.
-2. Select the Withdraw function, set 10.00000000 WHBARs and press "Withdraw". Alice will pay 0.00000010 WHBARs as fee **on top** of the withdrawal amount, and the app will ask to sign the transaction with Carl's wallet account.
+2. Select the Withdraw function, set 10.00000000 WHBARs (`1000000000`) and press "Withdraw". Alice will pay 0.00000010 WHBARs (`10`) as fee **on top** of the withdrawal amount, and the app will ask to sign the transaction with Carl's wallet account.
 3. After signing the transaction, the withdraw transaction is submitted on-chain.
 4. Ask for anothe block to be created and wait for the transaction to be confirmed on the Hedera network
 5. After 7 days, Carl can redeem the funds sending a new transaction to the contract.

@@ -1,0 +1,165 @@
+#!/usr/bin/env node
+
+/**
+ * Sourcify contract verification script for Hedera (Hashscan).
+ *
+ * Usage:
+ *   node verify-contract <address> [jsonFile] [chainId]
+ *
+ * Arguments:
+ *   address   - The EVM contract address to verify (required)
+ *   jsonFile  - Path to the Sourcify standard-JSON input file
+ *               (default: ./utils/TransparentUpgradeableProxy.json)
+ *   chainId   - The chain ID (default: 296 — Hedera testnet)
+ *
+ * Examples:
+ *   ./verify-contract 0x260521ff9cfc7bfdf7faaa32060dccac81277298
+ *   ./verify-contract 0x260521ff9cfc7bfdf7faaa32060dccac81277298 ./utils/ProxyAdmin.json
+ *   ./verify-contract 0x260521ff9cfc7bfdf7faaa32060dccac81277298 ./utils/TransparentUpgradeableProxy.json 295
+ */
+
+import { readFileSync } from "fs";
+import { resolve, basename } from "path";
+
+const BASE_URL = "https://server-verify.hashscan.io";
+
+const COMMON_HEADERS = {
+  accept: "application/json, text/plain, */*",
+  "cache-control": "no-cache",
+  pragma: "no-cache",
+  Referer: "https://hashscan.io/",
+};
+
+const JSON_HEADERS = {
+  ...COMMON_HEADERS,
+  "content-type": "application/json",
+};
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+let sessionCookie = "";
+
+function extractCookie(res) {
+  const setCookie = res.headers.getSetCookie?.() ?? [];
+  for (const c of setCookie) {
+    const match = c.match(/sourcify_vid=[^;]+/);
+    if (match) sessionCookie = match[0];
+  }
+}
+
+function withCookie(headers) {
+  return sessionCookie ? { ...headers, cookie: sessionCookie } : { ...headers };
+}
+
+async function postJson(path, body) {
+  const url = `${BASE_URL}${path}`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: withCookie(JSON_HEADERS),
+    body: JSON.stringify(body),
+  });
+  extractCookie(res);
+  const data = await res.json();
+  if (!res.ok) {
+    console.error(`  ✗ POST ${path} → ${res.status} ${res.statusText}`);
+    process.exit(1);
+  }
+  return data;
+}
+
+async function postFormData(path, filePath) {
+  const fileContent = readFileSync(filePath);
+  const fileName = basename(filePath);
+
+  const formData = new FormData();
+  formData.append("files", new Blob([fileContent], { type: "application/json" }), fileName);
+
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: "POST",
+    headers: withCookie(COMMON_HEADERS),
+    body: formData,
+  });
+  extractCookie(res);
+  const data = await res.json();
+  if (!res.ok) {
+    console.error(`  ✗ POST ${path} → ${res.status} ${res.statusText}`);
+    process.exit(1);
+  }
+  return data;
+}
+
+async function get(path) {
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: "GET",
+    headers: withCookie(COMMON_HEADERS),
+  });
+  extractCookie(res);
+  const data = await res.json();
+  if (!res.ok) {
+    console.error(`  ✗ GET ${path} → ${res.status} ${res.statusText}`);
+    process.exit(1);
+  }
+  return data;
+}
+
+// ---------------------------------------------------------------------------
+// Main
+// ---------------------------------------------------------------------------
+
+const [address, jsonFilePath, chainIdArg] = process.argv.slice(2);
+
+if (!address) {
+  console.error("Usage: verify-contract <address> [jsonFile] [chainId]");
+  process.exit(1);
+}
+
+const chainId = chainIdArg || "296";
+const jsonFile = resolve(jsonFilePath || "./utils/TransparentUpgradeableProxy.json");
+
+console.log(`Verifying ${address}`);
+
+// --- Step 1: Upload input files (dry-run) ---
+const step1 = await postFormData("/session/input-files?dryrun=true", jsonFile);
+
+const contract = step1.contracts?.[0];
+if (!contract) {
+  console.error("  ✗ No contracts returned from input-files upload.");
+  process.exit(1);
+}
+
+const { verificationId, name } = contract;
+
+if (contract.files?.missing && Object.keys(contract.files.missing).length > 0) {
+  console.warn("  ⚠ Missing files:", Object.keys(contract.files.missing).join(", "));
+}
+
+// --- Step 2: Verify (dry-run) ---
+const verifyPayload = {
+  contracts: [{ address, chainId, verificationId, creatorTxHash: null }],
+};
+
+const step2 = await postJson("/session/verify-checked?dryrun=true", verifyPayload);
+
+const step2Status = step2.contracts?.[0]?.status;
+if (step2Status !== "perfect" && step2Status !== "partial") {
+  console.error(`  ✗ Dry-run failed (status: ${step2Status})`);
+  process.exit(1);
+}
+
+const checksumAddress = step2.contracts[0].address || address;
+
+// --- Step 3: Verify (persist) ---
+const step3 = await postJson("/session/verify-checked", verifyPayload);
+
+const step3Status = step3.contracts?.[0]?.status;
+if (step3Status !== "perfect" && step3Status !== "partial") {
+  console.error(`  ✗ Persist failed (status: ${step3Status})`);
+  process.exit(1);
+}
+
+// --- Step 4: Confirm ---
+const step4 = await get(`/files/any/${chainId}/${checksumAddress}`);
+
+console.log(`  ✓ ${name} @ ${checksumAddress} — ${step4.status} (${step4.files?.length ?? 0} files)`);

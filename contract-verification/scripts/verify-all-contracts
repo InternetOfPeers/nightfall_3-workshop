@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Load nvm (it's a shell function, not a binary)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+echo "Copying the compiled contracts from the docker volumes to the local folders..."
+mkdir -p ./artifacts
+mkdir -p ./build
+
+cp -r ../../nightfall_3/docker/volumes/artifacts/ ./artifacts/
+cp -r ../../nightfall_3/docker/volumes/build/ ./build/
+
+echo "Installing dependencies..."
+nvm install 20
+npm i
+
+VERIFICATION_INFO="./build/verification-info.json"
+
+if [ ! -f "$VERIFICATION_INFO" ]; then
+  echo "Error: $VERIFICATION_INFO not found. Run the deployer first."
+  exit 1
+fi
+
+# Verify simple (non-proxied) contracts
+SIMPLE_COUNT=$(jq '.simple | length' "$VERIFICATION_INFO")
+for i in $(seq 0 $((SIMPLE_COUNT - 1))); do
+  CONTRACT_NAME=$(jq -r ".simple[$i].name" "$VERIFICATION_INFO")
+  CONTRACT_ADDRESS=$(jq -r ".simple[$i].address" "$VERIFICATION_INFO")
+
+  if [ -z "$CONTRACT_ADDRESS" ] || [ "$CONTRACT_ADDRESS" = "null" ]; then
+    echo "Skipping $CONTRACT_NAME: no address"
+    continue
+  fi
+
+  echo "Verifying $CONTRACT_NAME at $CONTRACT_ADDRESS"
+  npx hardhat verify --network hedera "$CONTRACT_ADDRESS"
+done
+
+# Verify proxied contracts: implementation (hardhat), proxy (sourcify), and ProxyAdmin (sourcify)
+PROXIED_COUNT=$(jq '.proxied | length' "$VERIFICATION_INFO")
+for i in $(seq 0 $((PROXIED_COUNT - 1))); do
+  CONTRACT_NAME=$(jq -r ".proxied[$i].name" "$VERIFICATION_INFO")
+  PROXY_ADDRESS=$(jq -r ".proxied[$i].proxy" "$VERIFICATION_INFO")
+  IMPL_ADDRESS=$(jq -r ".proxied[$i].implementation" "$VERIFICATION_INFO")
+  ADMIN_ADDRESS=$(jq -r ".proxied[$i].admin" "$VERIFICATION_INFO")
+
+  # Verify the implementation contract with hardhat verify
+  if [ -n "$IMPL_ADDRESS" ] && [ "$IMPL_ADDRESS" != "null" ]; then
+    echo "Verifying implementation for $CONTRACT_NAME at $IMPL_ADDRESS"
+    npx hardhat verify --network hedera "$IMPL_ADDRESS"
+  fi
+
+  # Verify the proxy (TransparentUpgradeableProxy) via Sourcify
+  if [ -n "$PROXY_ADDRESS" ] && [ "$PROXY_ADDRESS" != "null" ]; then
+    echo "Verifying proxy for $CONTRACT_NAME at $PROXY_ADDRESS"
+    ./scripts/verify-contract "$PROXY_ADDRESS"
+  fi
+
+  # Verify the ProxyAdmin via Sourcify
+  if [ -n "$ADMIN_ADDRESS" ] && [ "$ADMIN_ADDRESS" != "null" ]; then
+    echo "Verifying ProxyAdmin for $CONTRACT_NAME at $ADMIN_ADDRESS"
+    ./scripts/verify-contract "$ADMIN_ADDRESS" ./utils/ProxyAdmin.json
+  fi
+done

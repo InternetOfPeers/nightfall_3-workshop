@@ -135,7 +135,14 @@ If you need to quickly transfer funds from your `$NATIVE_ACCOUNT_ID` to fund oth
 
 4. Check the configurations in `./bin/hedera-deployment.env` (configurations for the deployer script) and `./.env.deployment.hedera` (configurations for Nightfall services) and update them if needed. **For the sake of the workshop, the configurations are ready to use**, you don't need to change anything. If in the future you want to experiment with this deployment, I suggest to update at least the `MULTISIG_APPROVERS` variable (minimum two accounts) before the deployment so you can control the multisig wallet that will own the contracts after the deployment.
 
-5. Run `./bin/hedera-deployer $EVM_ADDRESS $EVM_PRIVATE_KEY`. It would take ~10 minutes to deploy and setup the contracts, and to generate the keys for the users. Once the deployment is complete, the deployer should exit succesfully and you should see something similar at the end of the deployer logs:
+5. Deploy the contracts and setup the circuits with the following command:
+
+    ```shell
+    nvm install 18
+    ./bin/hedera-deployer $EVM_ADDRESS $EVM_PRIVATE_KEY
+    ```
+
+    This script will take ~10 minutes to deploy and setup the contracts, and to generate the keys for the users. Once the deployment is complete, the deployer should exit succesfully and you should see something similar at the end of the deployer logs:
 
     ```shell
     deployer-1  | [2026-02-09 21:22:19.744] DEBUG: Gas estimated at 36866
@@ -162,7 +169,14 @@ If you need to quickly transfer funds from your `$NATIVE_ACCOUNT_ID` to fund oth
     docker compose -p nightfall_3 down --remove-orphans
     ```
 
-10. Close the current terminal, and leave the terminal running the JSON-RPC relay open, as it will be needed to start Nightfall in the next step.
+10. (Optional) Verify the contracts on Hashscan using the script below. This will make easier to follow the transactions and interactions on the Hedera block explorer during the workshop.
+
+    ```shell
+    cd ../nightfall_3-workshop/contract-verification
+    ./scripts/verify-all-contracts
+    ```
+
+11. Close the current terminal and leave the JSON-RPC relay open, as it will be needed to start Nightfall in the next step.
 
 ## Start Nightfall
 
